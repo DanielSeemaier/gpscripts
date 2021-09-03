@@ -1,0 +1,25 @@
+# -*- shell-script -*-
+
+VERSION="4.0.3"
+
+function fetch_partitioner {
+    wget -q http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz --directory-prefix="$TMP" 
+    echo "$TMP"/parmetis-"$VERSION".tar.gz
+}
+
+function install_partitioner {
+    src="$1"
+    workspace="$TMP"/parmetis/
+    dir="$(pwd)"
+    
+    rm -rf "$workspace" && \
+	mkdir -p "$workspace" && \
+	tar -xzf $src -C "$workspace" && \
+	cd "$workspace"/parmetis-"$VERSION"/ && \
+	make config prefix="$workspace/" && \
+	make -j && \
+	make install && \
+	cd "$dir" && \
+	cp "$workspace"/bin/parmetis "$BIN"/parmetis
+}
+

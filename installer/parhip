@@ -1,0 +1,23 @@
+# -*- shell-script -*-
+
+VERSION="3.11"
+
+function fetch_partitioner {
+    wget -q https://github.com/KaHIP/KaHIP/archive/refs/tags/v"$VERSION".tar.gz --directory-prefix="$TMP" 
+    echo "$TMP"/v"$VERSION".tar.gz
+}
+
+function install_partitioner {
+    src="$1"
+    workspace="$TMP"/kahip/
+    dir="$(pwd)"
+    
+    rm -rf "$workspace" && \
+	mkdir -p "$workspace" && \
+	tar -xzf "$src" -C "$workspace" && \
+	cd "$workspace"/KaHIP-"$VERSION"/ && \
+	./compile_withcmake.sh && \
+	cd "$dir" && \
+	cp "$workspace"/KaHIP-"$VERSION"/deploy/parhip "$BIN"/parhip
+}
+

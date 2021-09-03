@@ -1,0 +1,29 @@
+#!/bin/bash
+TMP=/tmp/
+BIN=$(dirname "$0")/bin/
+
+mkdir -p "$BIN"
+mkdir -p "$TMP"
+
+program="$1"
+src="$2"
+
+installer_script=$(dirname "$0")/installer/"$program"
+if [[ ! -f "$installer_script" ]]; then
+    echo "unknown program: $program"
+    exit 1
+fi
+
+source "$installer_script"
+
+if [[ "$src" == "" ]]; then
+    src=$(fetch_partitioner)
+fi
+
+install_partitioner "$src"
+
+exit 0
+
+
+
+

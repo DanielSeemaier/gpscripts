@@ -1,0 +1,23 @@
+#!/bin/bash
+format=$1
+log_dir=${2:-"."}
+
+self_dir=$(dirname "$0")
+script_filename="${self_dir}/parser/${format}"
+
+echo "$script_filename"
+
+if [[ ! -f "$script_filename" ]]; then
+    echo "unsupported format: $format"; exit 1
+fi
+
+gawk -f "$script_filename" <(
+    for file in "$log_dir"/*; do
+	echo "__BEGIN_FILE__" $(basename "$file")
+	cat "$file"
+	echo "__END_FILE__"
+    done
+)
+
+exit 0
+

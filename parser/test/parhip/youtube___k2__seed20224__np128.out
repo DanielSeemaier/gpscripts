@@ -1,0 +1,142 @@
+running collective dummy operations took 0.00621915
+Reading binary graph ...
+version: 3 n: 1134890 m: 5975246
+peID 0 from 0 to 8866 amount 8867
+peID 48 from 425616 to 434482 amount 8867
+peID 32 from 283744 to 292610 amount 8867
+peID 16 from 141872 to 150738 amount 8867
+peID 1 from 8867 to 17733 amount 8867
+peID 17 from 150739 to 159605 amount 8867
+peID 33 from 292611 to 301477 amount 8867
+peID 37 from 328079 to 336945 amount 8867
+peID 49 from 434483 to 443349 amount 8867
+peID 5 from 44335 to 53201 amount 8867
+peID 21 from 186207 to 195073 amount 8867
+peID 41 from 363547 to 372413 amount 8867
+peID 53 from 469951 to 478817 amount 8867
+peID 61 from 540887 to 549753 amount 8867
+peID 44 from 390148 to 399014 amount 8867
+peID 45 from 399015 to 407881 amount 8867
+peID 57 from 505419 to 514285 amount 8867
+peID 13 from 115271 to 124137 amount 8867
+peID 20 from 177340 to 186206 amount 8867
+peID 8 from 70936 to 79802 amount 8867
+peID 4 from 35468 to 44334 amount 8867
+peID 24 from 212808 to 221674 amount 8867
+peID 36 from 319212 to 328078 amount 8867
+peID 40 from 354680 to 363546 amount 8867
+peID 52 from 461084 to 469950 amount 8867
+peID 56 from 496552 to 505418 amount 8867
+peID 29 from 257143 to 266009 amount 8867
+peID 12 from 106404 to 115270 amount 8867
+peID 28 from 248276 to 257142 amount 8867
+peID 50 from 443350 to 452216 amount 8867
+peID 63 from 558621 to 567487 amount 8867
+peID 60 from 532020 to 540886 amount 8867
+peID 58 from 514286 to 523152 amount 8867
+peID 47 from 416749 to 425615 amount 8867
+peID 31 from 274877 to 283743 amount 8867
+peID 3 from 26601 to 35467 amount 8867
+peID 10 from 88670 to 97536 amount 8867
+peID 15 from 133005 to 141871 amount 8867
+peID 42 from 372414 to 381280 amount 8867
+peID 25 from 221675 to 230541 amount 8867
+peID 51 from 452217 to 461083 amount 8867
+peID 9 from 79803 to 88669 amount 8867
+peID 19 from 168473 to 177339 amount 8867
+peID 39 from 345813 to 354679 amount 8867
+peID 43 from 381281 to 390147 amount 8867
+peID 14 from 124138 to 133004 amount 8867
+peID 35 from 310345 to 319211 amount 8867
+peID 59 from 523153 to 532019 amount 8867
+peID 27 from 239409 to 248275 amount 8867
+peID 11 from 97537 to 106403 amount 8867
+peID 62 from 549754 to 558620 amount 8867
+peID 7 from 62069 to 70935 amount 8867
+peID 30 from 266010 to 274876 amount 8867
+peID 46 from 407882 to 416748 amount 8867
+peID 55 from 487685 to 496551 amount 8867
+peID 23 from 203941 to 212807 amount 8867
+peID 18 from 159606 to 168472 amount 8867
+peID 34 from 301478 to 310344 amount 8867
+peID 6 from 53202 to 62068 amount 8867
+peID 54 from 478818 to 487684 amount 8867
+peID 22 from 195074 to 203940 amount 8867
+peID 2 from 17734 to 26600 amount 8867
+peID 38 from 336946 to 345812 amount 8867
+peID 26 from 230542 to 239408 amount 8867
+peID 64 from 567488 to 576354 amount 8867
+peID 65 from 576355 to 585221 amount 8867
+peID 66 from 585222 to 594088 amount 8867
+peID 67 from 594089 to 602955 amount 8867
+peID 68 from 602956 to 611822 amount 8867
+peID 69 from 611823 to 620689 amount 8867
+peID 70 from 620690 to 629556 amount 8867
+peID 71 from 629557 to 638423 amount 8867
+peID 72 from 638424 to 647290 amount 8867
+peID 73 from 647291 to 656157 amount 8867
+peID 74 from 656158 to 665024 amount 8867
+peID 75 from 665025 to 673891 amount 8867
+peID 76 from 673892 to 682758 amount 8867
+peID 77 from 682759 to 691625 amount 8867
+peID 78 from 691626 to 700492 amount 8867
+peID 79 from 700493 to 709359 amount 8867
+peID 80 from 709360 to 718226 amount 8867
+peID 81 from 718227 to 727093 amount 8867
+peID 82 from 727094 to 735960 amount 8867
+peID 83 from 735961 to 744827 amount 8867
+peID 84 from 744828 to 753694 amount 8867
+peID 85 from 753695 to 762561 amount 8867
+peID 86 from 762562 to 771428 amount 8867
+peID 87 from 771429 to 780295 amount 8867
+peID 88 from 780296 to 789162 amount 8867
+peID 89 from 789163 to 798029 amount 8867
+peID 90 from 798030 to 806896 amount 8867
+peID 91 from 806897 to 815763 amount 8867
+peID 92 from 815764 to 824630 amount 8867
+peID 93 from 824631 to 833497 amount 8867
+peID 94 from 833498 to 842364 amount 8867
+peID 95 from 842365 to 851231 amount 8867
+peID 96 from 851232 to 860098 amount 8867
+peID 97 from 860099 to 868965 amount 8867
+peID 98 from 868966 to 877832 amount 8867
+peID 99 from 877833 to 886699 amount 8867
+peID 100 from 886700 to 895566 amount 8867
+peID 101 from 895567 to 904433 amount 8867
+peID 102 from 904434 to 913300 amount 8867
+peID 103 from 913301 to 922167 amount 8867
+peID 104 from 922168 to 931034 amount 8867
+peID 105 from 931035 to 939901 amount 8867
+peID 106 from 939902 to 948768 amount 8867
+peID 107 from 948769 to 957635 amount 8867
+peID 108 from 957636 to 966502 amount 8867
+peID 109 from 966503 to 975369 amount 8867
+peID 110 from 975370 to 984236 amount 8867
+peID 111 from 984237 to 993103 amount 8867
+peID 112 from 993104 to 1001970 amount 8867
+peID 113 from 1001971 to 1010837 amount 8867
+peID 114 from 1010838 to 1019704 amount 8867
+peID 115 from 1019705 to 1028571 amount 8867
+peID 116 from 1028572 to 1037438 amount 8867
+peID 117 from 1037439 to 1046305 amount 8867
+peID 118 from 1046306 to 1055172 amount 8867
+peID 119 from 1055173 to 1064039 amount 8867
+peID 120 from 1064040 to 1072906 amount 8867
+peID 121 from 1072907 to 1081773 amount 8867
+peID 122 from 1081774 to 1090640 amount 8867
+peID 123 from 1090641 to 1099507 amount 8867
+peID 124 from 1099508 to 1108374 amount 8867
+peID 125 from 1108375 to 1117241 amount 8867
+peID 126 from 1117242 to 1126108 amount 8867
+peID 127 from 1126109 to 1134889 amount 8781
+took 0.0924029
+n:1134890 m: 5975246
+log> ghost edges 0.923544
+log> local edges 0.0764561
+upper bound on blocks 584468
+log>=====================================
+log>============AND WE R DONE============
+log>=====================================
+log>total partitioning time elapsed 4.12663
+log>final edge cut 173839
+log>final balance 1.03

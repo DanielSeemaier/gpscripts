@@ -1,0 +1,5 @@
+/home/seemaier/projects/gpscripts/parser/parhip
+Graph,N,M,K,Seed,Cut,Balance,Time,NumProcessors,Failed
+youtube,1134890,5975246,2,20224,173839,0.030000,4.126630,128,0
+youtube,1134890,5975246,32,19147,967582,0.029970,5.173990,-1,0
+youtube,1134890,5975246,8,16583,597840,0.029990,3.315910,-1,0

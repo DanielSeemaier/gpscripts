@@ -1,0 +1,4 @@
+/home/seemaier/projects/gpscripts/parser/metis
+Graph,N,M,K,Epsilon,Seed,Cut,Balance,Time,Failed
+4elt.graph,15606,91756,4,0.030000,123,368,0.003000,0.009000,0
+add20.graph,2395,14924,8,0.030000,-1,1842,0.029000,0.012000,0

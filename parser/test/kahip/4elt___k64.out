@@ -1,0 +1,10 @@
+io time: 0.0177958
+graph has 15606 nodes and 91756 edges
+performing partitioning!
+time spent for partitioning 3.50036
+cut 		2648
+finalobjective  2648
+bnd 		2563
+balance 	1.02459
+max_comm_vol 	69
+writing partition to tmppartition64 ... 

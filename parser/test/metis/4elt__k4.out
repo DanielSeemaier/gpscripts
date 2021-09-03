@@ -1,0 +1,34 @@
+******************************************************************************
+METIS 5.0 Copyright 1998-13, Regents of the University of Minnesota
+ (HEAD: , Built on: Apr 19 2021, 22:31:48)
+ size of idx_t: 32bits, real_t: 32bits, idx_t *: 64bits
+
+Graph Information -----------------------------------------------------------
+ Name: /global_data/seemaier/benchmark_sets/all/4elt.graph, #Vertices: 15606, #Edges: 45878, #Parts: 4
+
+Options ---------------------------------------------------------------------
+ ptype=kway, objtype=cut, ctype=shem, rtype=greedy, iptype=metisrb
+ dbglvl=0, ufactor=1.030, no2hop=NO, minconn=NO, contig=NO, nooutput=NO
+ seed=123, niter=10, ncuts=1
+
+Direct k-way Partitioning ---------------------------------------------------
+ - Edgecut: 368, communication volume: 376.
+
+ - Balance:
+     constraint #0:  1.003 out of 0.000
+
+ - Most overweight partition:
+     pid: 0, actual: 3914, desired: 3901, ratio: 1.00.
+
+ - Subdomain connectivity: max: 3, min: 3, avg: 3.00
+
+ - Each partition is contiguous.
+
+Timing Information ----------------------------------------------------------
+  I/O:          		   0.009 sec
+  Partitioning: 		   0.009 sec   (METIS time)
+  Reporting:    		   0.001 sec
+
+Memory Information ----------------------------------------------------------
+  Max memory used:		   1.476 MB
+******************************************************************************

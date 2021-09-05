@@ -1,0 +1,52 @@
+#!/bin/bash
+. "${0%/*}/config"
+
+partitioner="$1"
+
+# setup parameters
+graph=""
+k=""
+epsilon="3"
+seed="$RANDOM"
+np="1"
+args=""
+
+for param in "$@"; do
+    var="${param#*=}"
+    if [[ "$param" == "graph="* ]]; then
+	graph="$var"
+    elif [[ "$param" == "k="* ]]; then
+	k="$var"
+    elif [[ "$param" == "epsilon="* ]]; then
+	epsilon="$var"
+    elif [[ "$param" == "seed="* ]]; then
+	seed="$var"
+    elif [[ "$param" == "np="* ]]; then
+	np="$var"
+    elif [[ "$param" == "args="* ]]; then
+	args="$var"
+    fi
+done
+
+runner="${0%/*}/runner/$partitioner"
+if [[ ! -f "$runner" ]]; then
+    echo "unknown partitioner: $partitioner"
+    exit 1
+fi
+
+function get_binary {
+    name="$1"
+    if [[ -x "$BIN_DIRECTORY/$name" ]]; then
+	echo "$BIN_DIRECTORY/$name"
+    elif [[ -x $(which "$name") ]]; then
+	echo $(which "$name")
+    else
+	echo "partitioner $name is not installed"
+	exit 1
+    fi
+}
+
+. "$runner"
+
+run_partitioner
+exit 0

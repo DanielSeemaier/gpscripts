@@ -1,0 +1,28 @@
+# -*- shell-script -*-
+
+# Parameters:
+# $graph
+# $k
+# $epsilon
+# $seed
+# $np
+# $args
+
+function run_partitioner {
+    bin=$(get_binary parhip)
+
+    cmd="$bin $graph --k=$k $args"
+    if [[ "$seed" != "" ]]; then cmd="$cmd --seed=$seed"; fi
+    if [[ "$epsilon" != "" ]]; then cmd="$cmd --imbalance=$epsilon"; fi
+    if [[ "$np" == "" ]]; then
+	echo "missing option: np"
+	exit 1
+    fi
+    if [[ "$args" != "--preconfiguration="* ]]; then
+	echo "missing args: --preconfiguration"
+	exit 1
+    fi
+
+    echo "running: mpirun -np $np $cmd"
+    mpirun -np $np $cmd
+}

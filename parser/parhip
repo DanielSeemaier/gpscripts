@@ -4,11 +4,11 @@ BEGIN {
     reset()
 }
 
-match($0, /__BEGIN_FILE__ (.*)___(k([0-9]+)(.*seed([0-9]+)(.*np([0-9]+))?)?)?/, m) {
+match($0, /__BEGIN_FILE__ (.*)___(k([0-9]+)(.*np([0-9]+)(.*seed([0-9]+))?)?)?/, m) {
     data["Graph"] = m[1]
     if (3 in m) data["K"] = m[3]
-    if (5 in m) data["Seed"] = m[5]
-    if (7 in m) data["NumProcessors"] = m[7]
+    if (5 in m) data["NumProcessors"] = m[5]
+    if (7 in m) data["Seed"] = m[7]
 }
 
 /__END_FILE__/ {

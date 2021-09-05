@@ -1,9 +1,8 @@
 #!/bin/bash
-TMP=/tmp/
-BIN=$(dirname "$0")/bin/
+. "${0%/*}/config"
 
-mkdir -p "$BIN"
-mkdir -p "$TMP"
+mkdir -p "$BIN_DIRECTORY"
+mkdir -p "$TMP_DIRECTORY"
 
 program="$1"
 src="$2"
@@ -23,7 +22,3 @@ fi
 install_partitioner "$src"
 
 exit 0
-
-
-
-

@@ -3,13 +3,13 @@
 VERSION="4.0.3"
 
 function fetch_partitioner {
-    wget -q http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz --directory-prefix="$TMP" 
-    echo "$TMP"/parmetis-"$VERSION".tar.gz
+    wget -q http://glaros.dtc.umn.edu/gkhome/fetch/sw/parmetis/parmetis-4.0.3.tar.gz --directory-prefix="$TMP_DIRECTORY" 
+    echo "$TMP_DIRECTORY"/parmetis-"$VERSION".tar.gz
 }
 
 function install_partitioner {
     src="$1"
-    workspace="$TMP"/parmetis/
+    workspace="$TMP_DIRECTORY"/parmetis/
     dir="$(pwd)"
     
     rm -rf "$workspace" && \
@@ -20,6 +20,6 @@ function install_partitioner {
 	make -j && \
 	make install && \
 	cd "$dir" && \
-	cp "$workspace"/bin/parmetis "$BIN"/parmetis
+	cp "$workspace"/bin/parmetis "$BIN_DIRECTORY"/parmetis
 }
 

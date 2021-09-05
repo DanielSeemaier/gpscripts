@@ -1,0 +1,3 @@
+# -*- shell-script -*-
+BIN_DIRECTORY="${0%/*}/bin/"
+TMP_DIRECTORY="/tmp/"

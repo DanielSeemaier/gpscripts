@@ -1,11 +1,31 @@
 #!/bin/bash
-. "${0%/*}/config"
-
-mkdir -p "$BIN_DIRECTORY"
-mkdir -p "$TMP_DIRECTORY"
+if (( "$#" < 1 )); then
+    echo "usage: $0 <partitioner> [path to source code]"
+    exit 1
+fi
 
 program="$1"
 src="$2"
+
+. "${0%/*}/config"
+mkdir -p "$BIN_DIRECTORY"
+mkdir -p "$TMP_DIRECTORY"
+
+function check_installed {
+    for var in "$@"; do
+	path=$(which "$var")
+	if [[ ! -x "$BINARY_DIR"/"$var" && ! -x "$path" ]]; then
+	    echo 0
+	    return
+	fi
+    done
+    
+    echo 1
+}
+
+function depends_on {
+    ${0%/*}/gpInstall "$1" 
+}
 
 installer_script=$(dirname "$0")/installer/"$program"
 if [[ ! -f "$installer_script" ]]; then
@@ -13,12 +33,16 @@ if [[ ! -f "$installer_script" ]]; then
     exit 1
 fi
 
-source "$installer_script"
+. "$installer_script"
 
-if [[ "$src" == "" ]]; then
-    src=$(fetch_partitioner)
+installed="$(is_installed)"
+if [[ "$installed" == "0" ]]; then
+    echo "Installing $program ..."
+    
+    if [[ "$src" == "" ]]; then
+	src=$(fetch_partitioner)
+    fi
+    install_partitioner "$src"
 fi
-
-install_partitioner "$src"
 
 exit 0

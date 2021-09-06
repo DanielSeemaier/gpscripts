@@ -5,7 +5,7 @@ function run_partitioner {
     optype=1
     adapthfactor=0
     ipc2redist=0
-    dbglevel=0
+    dbglevel=3
 
     require_arg "np"
     if [[ "$epsilon" != "3" ]]; then
@@ -21,5 +21,13 @@ function run_partitioner {
     cmd="mpirun -np $np $bin $graph $optype $k $adapthfactor $ipc2redist $dbglevel $seed"
 
     echo "running $cmd"
-    exec $cmd
+    eval $cmd
+
+    verifier=$(get_binary VerifyPartition)
+    cmd="VerifyPartition $graph $graph.part"
+    if [[ "$k" != "2" ]]; then
+	cmd="${cmd}.$k"
+    fi
+    echo "evaluating: $cmd"
+    eval $cmd
 }

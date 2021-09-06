@@ -1,0 +1,37 @@
+# -*- shell-script -*-
+
+VERSION="1.0"
+
+function is_installed {
+    check_installed GraphStatistics GraphConverter GraphChecker VerifyPartition
+}
+
+function fetch_partitioner {
+    wget -q https://github.com/KaHIP/KaMinPar/archive/refs/tags/v"$VERSION".tar.gz --directory-prefix="$TMP_DIRECTORY" 
+    echo "$TMP_DIRECTORY"/v"$VERSION".tar.gz
+}
+
+function install_partitioner {
+    src="$1"
+    workspace="$TMP_DIRECTORY"/graphtools/
+    root="$workspace/KaMinPar-$VERSION/"
+    bin="$BIN_DIRECTORY"
+    dir="$(pwd)"
+    
+    rm -rf "$workspace" && 
+	mkdir -p "$workspace" && 
+	tar -xzf $src -C "$workspace" && 
+	cd "$root"/ && 
+	git clone https://github.com/google/googletest.git external_tools/googletest/ &&
+	mkdir build && cd build && 
+	cmake .. -DCMAKE_BUILD_TYPE=Release -DKAMINPAR_64BIT_EDGE_IDS=On && 
+	make VerifyPartition -j && 
+	make GraphStatistics -j && 
+	make GraphConverter -j && 
+	make GraphChecker -j && 
+	cp "$root"/build/apps/tools/GraphStatistics "$bin"/GraphStatistics &&
+	cp "$root"/build/apps/tools/VerifyPartition "$bin"/VerifyPartition &&
+	cp "$root"/build/apps/tools/GraphConverter "$bin"/GraphConverter &&
+	cp "$root"/build/apps/tools/GraphChecker "$bin"/GraphChecker
+}
+

@@ -1,0 +1,25 @@
+# -*- shell-script -*-
+
+# TODO does not seem to work?
+function run_partitioner {
+    optype=1
+    adapthfactor=0
+    ipc2redist=0
+    dbglevel=0
+
+    require_arg "np"
+    if [[ "$epsilon" != "3" ]]; then
+       echo "unsupported imbalance: $epsilon"
+       exit 1
+    fi
+    if [[ "$args" != "" ]]; then
+	echo "unsupported additional arguments: $args"
+	exit 1
+    fi
+
+    bin=$(get_binary parmetis)
+    cmd="mpirun -np $np $bin $graph $optype $k $adapthfactor $ipc2redist $dbglevel $seed"
+
+    echo "running $cmd"
+    exec $cmd
+}

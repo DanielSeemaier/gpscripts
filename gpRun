@@ -46,6 +46,13 @@ function get_binary {
     fi
 }
 
+function require_arg {
+    if [[ ${!1} == "" ]]; then
+	echo "missing arg: $1"
+	exit 1
+    fi
+}
+
 . "$runner"
 
 run_partitioner

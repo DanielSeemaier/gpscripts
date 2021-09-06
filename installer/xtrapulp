@@ -1,0 +1,25 @@
+# -*- shell-script -*-
+
+function is_installed {
+    check_installed "xtrapulp"
+}
+
+function fetch_partitioner {
+    wget -q https://github.com/HPCGraphAnalysis/PuLP/archive/refs/heads/master.zip --directory-prefix="$TMP_DIRECTORY" 
+    echo "$TMP_DIRECTORY"/master.zip
+}
+
+function install_partitioner {
+    src="$1"
+    workspace="$TMP_DIRECTORY"/xtrapulp/
+    dir="$(pwd)"
+    
+    rm -rf "$workspace" && 
+	mkdir -p "$workspace" && 
+	unzip "$src" -d "$workspace" && 
+	cd "$workspace"/PuLP-master/xtrapulp/0.3/ && 
+	make -j &&
+	cd "$dir" &&
+	cp "$workspace"/PuLP-master/xtrapulp/0.3/xtrapulp "$BIN_DIRECTORY"/xtrapulp
+}
+

@@ -10,7 +10,7 @@
 
 function run_partitioner {
     bin=$(get_binary parhip)
-
+    
     cmd="$bin $graph --k=$k $args"
     if [[ "$seed" != "" ]]; then cmd="$cmd --seed=$seed"; fi
     if [[ "$epsilon" != "" ]]; then cmd="$cmd --imbalance=$epsilon"; fi

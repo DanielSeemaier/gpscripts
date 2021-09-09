@@ -1,0 +1,15 @@
+running mpirun -np 128 /home/seemaier/projects/gpscripts/bin//parmetis /global_data/seemaier/benchmark_sets/parhip_small/amazon.graph 1 2 0 0 3 9451
+reading file: /global_data/seemaier/benchmark_sets/parhip_small/amazon.graph
+finished reading file: /global_data/seemaier/benchmark_sets/parhip_small/amazon.graph
+      Setup: Max:   0.034, Sum:   4.349, Balance:   1.002
+   Matching: Max:   0.037, Sum:   4.746, Balance:   1.001
+Contraction: Max:   0.018, Sum:   2.346, Balance:   1.003
+   InitPart: Max:   0.058, Sum:   7.373, Balance:   1.001
+    Project: Max:   0.001, Sum:   0.142, Balance:   1.154
+ Initialize: Max:   0.005, Sum:   0.623, Balance:   1.061
+      K-way: Max:   0.036, Sum:   4.655, Balance:   1.001
+      Remap: Max:   0.000, Sum:   0.000, Balance:   1.778
+      Total: Max:   0.191, Sum:  24.432, Balance:   1.002
+Final   2-way Cut:  46656 	Balance: 1.050 
+evaluating: VerifyPartition /global_data/seemaier/benchmark_sets/parhip_small/amazon.graph /global_data/seemaier/benchmark_sets/parhip_small/amazon.graph.part
+RESULT k=2 cut=46656 imbalance=0.0496896

@@ -1,0 +1,25 @@
+# -*- shell-script -*-
+
+#
+# Run dKaMinPar on $np NUMA nodes 
+#
+
+function cores_per_numa {
+    cores_per_numa_node=$(lscpu | awk 'match($0, /NUMA node0 CPU\(s\):\s*0-([0-9]+)/, m) { print m[1] }')
+    cores_per_numa_node=$(($cores_per_numa_node+1))
+    echo $cores_per_numa_node
+}
+
+function run_partitioner {
+    require_arg "np"
+    require_arg "k"
+    require_arg "graph"
+
+    cores=$(cores_per_numa)
+    eps=$(echo "scale=3; ${epsilon}/100" | bc -l | awk '{ printf "%f", $0 }')
+    bin=$(get_binary dKaMinPar)
+    cmd="mpirun -np $np --map-by numa:PE=${cores} $bin -G $graph -k $k -e $eps -t $cores --seed=$seed"
+
+    echo "running $cmd"
+    eval $cmd
+}

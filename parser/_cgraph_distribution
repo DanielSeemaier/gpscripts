@@ -1,0 +1,64 @@
+# -*-awk-*-
+BEGIN {
+    header()
+    reset()
+    level = 0
+}
+
+match($0, /global_n=([0-9]+) global_m=([0-9]+) local_n=\[([^\]]+)\] local_m=\[([^\]]+)\] ghost_n=\[([^\]]+)\] total_n=\[([^\]]+)\]/, m) {
+    gsub(/, /, ";", m[3])
+    gsub(/, /, ";", m[4])
+    gsub(/, /, ";", m[5])
+    gsub(/, /, ";", m[6])
+    
+    # output
+    printf "%s,", data["Graph"]
+    printf "%d,", level
+    printf "%d,", m[1]
+    printf "%d,", m[2]
+    printf "%d,", data["K"]
+    printf "%s,", m[3]
+    printf "%s,", m[4]
+    printf "%s,", m[5]
+    printf "%s,", m[6]
+    printf "%d,", data["Nodes"]
+    printf "%d,", data["Threads"]
+    printf "%d,", data["Nodes"] * data["Threads"]
+    printf "%d\n", 0
+
+    level++
+}
+
+match($0, /MPI size=([0-9]+)/, m) {
+    data["Nodes"] = m[1]
+}
+
+match($0, /graph_filename=(.*\/([^ ]*\.graph)).* seed=([0-9]+).* partition\.k=([0-9]+).* parallel\.num_threads=([0-9]+)/, m) {
+    data["Graph"] = m[2]
+    data["K"] = m[4]
+    data["Threads"] = m[5]
+    level = 0
+}
+
+END {
+}
+
+function header() {
+    printf "Graph,"
+    printf "Level,"
+    printf "N,"
+    printf "M,"
+    printf "K,"
+    printf "LocalN,"
+    printf "LocalM,"
+    printf "GhostN,"
+    printf "TotalN,"
+    printf "NumNodes,"
+    printf "NumThreads,"
+    printf "NumPEs,"
+    printf "Failed\n"
+}
+
+function reset() {
+    split("", data)
+}

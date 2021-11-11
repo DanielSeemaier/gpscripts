@@ -40,9 +40,6 @@ match($0, /graph_filename=(.*\/([^ ]*\.graph)).* seed=([0-9]+).* partition\.k=([
     level = 0
 }
 
-END {
-}
-
 function header() {
     printf "Graph,"
     printf "Level,"

@@ -1,0 +1,96 @@
+# -*-awk-*-
+BEGIN {
+    header()
+    reset()
+    level = 0
+}
+
+/__END_FILE__/ {
+    yield()
+    level = 0
+}
+
+match($0, /global_n=([0-9]+) global_m=([0-9]+)/, m) {
+    if (level == 0) {
+	data["N"] = m[1]
+	data["M"] = m[2]
+	level++
+    }
+}
+
+match($0, /MPI size=([0-9]+)/, m) {
+    data["Nodes"] = m[1]
+}
+
+match($0, /graph_filename=(.*\/([^ ]*\.graph)).* seed=([0-9]+).* partition\.k=([0-9]+).* parallel\.num_threads=([0-9]+)/, m) {
+    data["Graph"] = m[2]
+    data["Seed"] = m[3]
+    data["K"] = m[4]
+    data["Threads"] = m[5]
+}
+
+match($0, /Initial partition: cut=([0-9]+) imbalance=([0-9\.e\-]+)/, m) {
+    data["IPCut"] = m[1]
+    data["IPBalance"] = m[2]
+}
+
+match($0, /-> imbalance=([0-9\.e\-]+)/, m) {
+    data["Balance"] = m[1]
+}
+
+match($0, /io=[0-9\.\-e]+ partitioning=([0-9\.e\-]+)/, m) {
+    data["Time"] = m[1]
+}
+
+match($0, /-> cut=([0-9]+)/, m) {
+    data["Cut"] = m[1]
+}
+
+END {
+    yield()
+}
+
+function header() {
+    printf "Graph,"
+    printf "N,"
+    printf "M,"
+    printf "K,"
+    printf "Seed,"
+    printf "Cut,"
+    printf "Balance,"
+    printf "Time,"
+    printf "IPCut,"
+    printf "IPBalance,"
+    printf "NumNodes,"
+    printf "NumThreads,"
+    printf "NumPEs,"
+    printf "Failed\n"
+}
+
+function yield() {
+    if (length(data) <= 4) { return }
+    
+    PEs = data["Nodes"] * data["Threads"]
+    failed = (length(data) != 12)
+    
+    printf "%s,", data["Graph"]
+    printf "%d,", data["N"]
+    printf "%d,", data["M"]
+    printf "%d,", data["K"]
+    printf "%d,", data["Seed"]
+    printf "%d,", data["Cut"]
+    printf "%f,", data["Balance"]
+    printf "%f,", data["Time"]
+    printf "%d,", data["IPCut"]
+    printf "%f,", data["IPBalance"]
+    printf "%d,", data["Nodes"]
+    printf "%d,", data["Threads"]
+    printf "%d,", PEs
+    printf "%d\n", failed
+    
+    reset()
+}
+
+function reset() {
+    split("", data)
+}

@@ -60,7 +60,7 @@ function header() {
 }
 
 function yield() {
-    if (length(data) <= 4) { return }
+    if (length(data) == 0) { return }
     
     printf "%s,", data["Graph"]
     printf "%d,", data["N"]
@@ -78,8 +78,4 @@ function yield() {
 
 function reset() {
     split("", data)
-    data["NumProcessors"] = -1
-    data["Seed"] = -1
-    data["K"] = -1
-    data["Graph"] = "null"
 }

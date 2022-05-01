@@ -1,0 +1,272 @@
+# -*-awk-*-
+BEGIN {
+    header()
+    reset()
+    level = 0
+}
+
+/__END_FILE__/ {
+    level = 0
+}
+
+match($0, /global_n=([0-9]+) global_m=([0-9]+)/, m) {
+    if (level == 0) {
+	data["N"] = m[1]
+	data["M"] = m[2]
+	level++
+    }
+}
+
+match($0, /MPI size=([0-9]+)/, m) {
+    data["Nodes"] = m[1]
+}
+
+match($0, /__BEGIN_FILE__ (.*)__k.*/, m) {
+    data["Graph"] = m[1]
+}
+
+# from file
+match($0, /graph_filename=(.*\/([^ ]*)(\.graph|\.bgf)).* seed=([0-9]+).* partition\.k=([0-9]+).* parallel\.num_threads=([0-9]+)/, m) {
+    data["Graph"] = m[2]
+    data["K"] = m[5]
+    data["Threads"] = m[6]
+}
+
+# from generator
+match($0, /seed=([0-9]+).* partition\.k=([0-9]+).* parallel\.num_threads=([0-9]+)/, m) {
+    data["K"] = m[2]
+    data["Threads"] = m[3]
+}
+
+match($0, /TIME.*io=([0-9\.]+)/, m) {
+    data["IO"] = m[1]
+}
+
+match($0, /TIME.*partitioning=([0-9\.]+)/, m) {
+    data["Time"] = m[1]
+}
+
+match($0, /TIME.*partitioning\.sort_graph=([0-9\.]+).*partitioning\.sort_graph\.sort_and_rearrange_graph\.sparse_alltoall_interfacetope=([0-9\.]+)/, m) {
+    data["Preprocessing"] = m[1]
+    data["PreprocessingA2A"] = m[2]
+}
+
+match($0, /TIME.*partitioning.coarsening=([0-9\.]+)/, m) {
+    data["Coarsening"] = m[1]
+}
+
+match($0, /TIME.*partitioning\.initial_partitioning=([0-9\.]+)/, m) {
+    data["InitialPartitioning"] = m[1]
+}
+
+match($0, /TIME.*partitioning\.uncoarsening=([0-9\.]+)/, m) {
+    data["Uncoarsening"] = m[1]
+}
+
+function join(array, start, end, sep,    result, i)
+{
+    if (sep == "")
+       sep = " "
+    else if (sep == SUBSEP) # magic value
+       sep = ""
+    result = array[start]
+    for (i = start + 1; i <= end; i++)
+        result = result sep array[i]
+    return result
+}
+
+
+function J(array) {
+    return join(array, 0, length(array) - 1, ";")
+}
+
+/TIME / {
+    PEs = data["Nodes"] * data["Threads"]
+
+    printf "%s,", data["Graph"]
+    printf "%d,", data["N"]
+    printf "%d,", data["M"]
+    printf "%d,", data["K"]
+    printf "%d,", data["Nodes"]
+    printf "%d,", data["Threads"]
+    printf "%d", PEs
+
+    sub(/TIME /, "", $0)
+    split($0, timings, " ")
+
+    split("", out)
+    for (i in timings) {
+        split(timings[i], parts, "=")
+        key = parts[1]
+        value = parts[2]
+        
+        if (key == "io") out["IO"] = value 
+        if (key == "partitioning") out["Partitioning"] = value 
+        if (key == "partitioning.sort_graph") out["Preprocessing"] = value 
+        if (key == "partitioning.coarsening") out["Coarsening"] = value 
+        if (key == "partitioning.initial_partitioning") out["InitialPartitioning"] = value 
+        if (key == "partitioning.uncoarsening") out["Uncoarsening"] = value 
+
+        if (match(key, /partitioning\.coarsening\.coarsening_level_([0-9]+)\.(.*)/, m)) {
+            level = m[1]
+            subkey = m[2]
+
+            if (subkey == "label_propagation") {
+                out["CTotalLabelPropagation"] += value 
+                out["CLabelPropagation"][level] = value
+            }
+            if (subkey == "label_propagation.allocation") {
+                out["CTotalLabelPropagationAllocation"] += value 
+                out["CLabelPropagationAllocation"][level] = value
+            }
+            if (subkey == "label_propagation.initialization") {
+                out["CTotalLabelPropagationInitialization"] += value 
+                out["CLabelPropagationInitialization"][level] = value
+            }
+            if (subkey == "label_propagation.synchronize_ghost_node_clusters") {
+                out["CTotalLabelPropagationSynchronizeGhostNodeClusters"] += value 
+                out["CLabelPropagationSynchronizeGhostNodeClusters"][level] = value
+            }
+            if (subkey == "label_propagation.synchronize_ghost_node_clusters.sparse_alltoall_interfacetope") {
+                out["CTotalLabelPropagationSynchronizeGhostNodeClustersA2A"] += value 
+                out["CLabelPropagationSynchronizeGhostNodeClustersA2A"][level] = value
+            }
+            if (subkey == "contract_clustering") {
+                out["CTotalContractClustering"] += value 
+                out["CContractClustering"][level] = value
+            }
+            if (subkey == "contract_clustering.compute_coarse_node_mapping") {
+                out["CTotalComputeCoarseNodeMapping"] += value 
+                out["CComputeCoarseNodeMapping"][level] = value
+            }
+            if (subkey == "contract_clustering.compute_coarse_node_mapping.find_used_cluster_ids_per_pe") {
+                out["CTotalComputeCoarseNodeMappingFindUsedClusters"] += value 
+                out["CComputeCoarseNodeMappingFindUsedClusters"][level] = value
+            }
+            if (subkey == "contract_clustering.compute_coarse_node_mapping.sparse_alltoall") {
+                out["CTotalComputeCoarseNodeMappingA2A"] += value 
+                out["CComputeCoarseNodeMappingA2A"][level] = value 
+            }
+            if (subkey == "contract_clustering.compute_coarse_node_mapping.exchange_ghost_node_mapping") {
+                out["CTotalComputeCoarseNodeMappingGhost"] += value 
+                out["CComputeCoarseNodeMappingGhost"][level] = value
+            }
+            if (subkey == "contract_clustering.build_coarse_graph") {
+                out["CTotalBuildCoarseGraph"] += value 
+                out["CBuildCoarseGraph"][level] = value 
+            }
+            if (subkey == "contract_clustering.build_coarse_graph.create_edge_messages") {
+                out["CTotalBuildCoarseGraphCreateEdgeMessages"] += value 
+                out["CBuildCoarseGraphCreateEdgeMessages"][level] = value 
+            }
+            if (subkey == "contract_clustering.build_coarse_graph.deduplicate_edges_before_sending") {
+                out["CTotalBuildCoarseGraphDeduplicateBeforeSending"] += value 
+                out["CBuildCoarseGraphDeduplicateBeforeSending"][level] = value 
+            }
+            if (subkey == "contract_clustering.build_coarse_graph.exchange_edges") {
+                out["CTotalExchangeEdges"] += value 
+                out["CExchangeEdges"][level] = value 
+            }
+            if (subkey == "contract_clustering.build_coarse_graph.exchange_node_weights") {
+                out["CTotalExchangeNodeWeights"] += value 
+                out["CExchangeNodeWeights"][level] = value 
+            }
+            if (subkey == "contract_clustering.build_coarse_graph.build_graph_from_edge_list") {
+                out["CTotalBuildGraphFromEdgeList"] += value 
+                out["CBuildGraphFromEdgeList"][level] = value 
+            }
+            if (subkey == "contract_clustering.update_ghost_node_weights") {
+                out["CTotalUpdateGhostNodeWeights"] += value 
+                out["CUpdateGhostNodeWeights"][level] = value
+            }
+            #print m[1], m[2]
+        }
+    }
+
+    printf ",%f", out["IO"]
+    printf ",%f", out["Partitioning"]
+    printf ",%f", out["Preprocessing"]
+    printf ",%f", out["Coarsening"]
+    printf ",%f", out["CTotalLabelPropagation"]
+    printf ",%f", out["CTotalLabelPropagationAllocation"]
+    printf ",%f", out["CTotalLabelPropagationInitialization"]
+    printf ",%f", out["CTotalLabelPropagationSynchronizeGhostNodeClusters"]
+    printf ",%f", out["CTotalLabelPropagationSynchronizeGhostNodeClustersA2A"]
+    printf ",%f", out["CTotalContractClustering"]
+    printf ",%f", out["CTotalComputeCoarseNodeMapping"]
+    printf ",%f", out["CTotalComputeCoarseNodeMappingFindUsedClusters"]
+    printf ",%f", out["CTotalComputeCoarseNodeMappingA2A"]
+    printf ",%f", out["CTotalComputeCoarseNodeMappingGhost"]
+    printf ",%f", out["CTotalBuildCoarseGraph"]
+    printf ",%f", out["CTotalBuildCoarseGraphCreateEdgeMessages"]
+    printf ",%f", out["CTotalBuildCoarseGraphDeduplicateBeforeSending"]
+    printf ",%f", out["CTotalExchangeEdges"]
+    printf ",%f", out["CTotalExchangeNodeWeights"]
+    printf ",%f", out["CTotalBuildGraphFromEdgeList"]
+    printf ",%f", out["CTotalUpdateGhostNodeWeights"]
+    printf ",%f", out["InitialPartitioning"]
+    printf ",%f", out["Uncoarsening"]
+
+    #printf "%s,", J(out["CLabelPropagation"])
+    #printf "%s,", J(out["CLabelPropagationAllocation"])
+    #printf "%s,", J(out["CLabelPropagationInitialization"])
+    #printf "%s,", J(out["CLabelPropagationSynchronizeGhostNodeClusters"])
+    #printf "%s,", J(out["CLabelPropagationSynchronizeGhostNodeClustersA2A"])
+    #printf "%s,", J(out["CContractClustering"])
+    #printf "%s,", J(out["CComputeCoarseNodeMapping"])
+    #printf "%s,", J(out["CComputeCoarseNodeMappingFindUsedClusters"])
+    #printf "%s,", J(out["CComputeCoarseNodeMappingA2A"])
+    #printf "%s,", J(out["CComputeCoarseNodeMappingGhost"])
+    #printf "%s,", J(out["CBuildCoarseGraph"])
+    #printf "%s,", J(out["CBuildCoarseGraphCreateEdgeMessages"])
+    #printf "%s,", J(out["CBuildCoarseGraphDeduplicateBeforeSending"])
+    #printf "%s,", J(out["CExchangeEdges"])
+    #printf "%s,", J(out["CExchangeNodeWeights"])
+    #printf "%s,", J(out["CBuildGraphFromEdgeList"])
+    #printf "%s,", J(out["CUpdateGhostNodeWeights"])
+
+    printf "\n"
+}
+
+function header() {
+    printf "Graph"
+    printf ",N"
+    printf ",M"
+    printf ",K"
+    printf ",NumNodes"
+    printf ",NumThreads"
+    printf ",NumPEs"
+
+    printf ",Time.IO"
+    printf ",Time.Partitioning"
+    printf ",Time.Preprocessing"
+    printf ",Time.Coarsening"
+    printf ",Time.Coarsening.LabelPropagation"
+    printf ",Time.Coarsening.LabelPropagation.Allocation"
+    printf ",Time.Coarsening.LabelPropagation.Initialization"
+    printf ",Time.Coarsening.LabelPropagation.SynchronizeGhostNodeClusters"
+    printf ",Time.Coarsening.LabelPropagation.SynchronizeGhostNodeClusters.A2A"
+    printf ",Time.Coarsening.ContractClustering"
+    printf ",Time.Coarsening.ContractClustering.ComputeCoarseNodeMapping"
+    printf ",Time.Coarsening.ContractClustering.ComputeCoarseNodeMapping.FindUsedClusters"
+    printf ",Time.Coarsening.ContractClustering.ComputeCoarseNodeMapping.A2A"
+    printf ",Time.Coarsening.ContractClustering.ComputeCoarseNodeMapping.ExchangeGhostMapping"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph.CreateEdgeMessages"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph.DeduplicateEdgesBeforeSending"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph.ExchangeEdges"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph.ExchangeNodeWeights"
+    printf ",Time.Coarsening.ContractClustering.BuildCoarseGraph.BuildGraphFromEdgeList"
+    printf ",Time.Coarsening.ContractClustering.UpdateGhostNodeWeights"
+    printf ",Time.InitialPartitioning"
+    printf ",Time.Uncoarsening"
+
+    #printf ",Vec.Time.Coarsening.LabelPropagation"
+    #printf ",Vec.Time.Coarsening.LabelPropagation.Allocation"
+
+    printf "\n"
+}
+
+function reset() {
+    split("", data)
+}

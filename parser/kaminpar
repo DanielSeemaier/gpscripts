@@ -1,0 +1,67 @@
+# -*-awk-*-
+BEGIN {
+    header()
+    reset()
+}
+
+/__END_FILE__/ {
+    yield()
+}
+
+match($0, /CONTEXT.*seed=([0-9]+)/, m) {
+    data["Seed"] = m[1]
+}
+
+match($0, /INPUT graph=([^ ]*\/)([^ ]+) n=([0-9]+) m=([0-9]+) k=([0-9]+)/, m) {
+    data["Graph"] = m[2]
+	data["N"] = m[3]
+	data["M"] = m[4]
+    data["K"] = m[5]
+}
+
+match($0, /RESULT cut=([0-9]+) imbalance=([0-9\.e\-]+)/, m) {
+    data["Cut"] = m[1]
+    data["Balance"] = m[2]
+}
+
+match($0, /io=[0-9\.e\-]+ partitioning=([0-9\.e\-]+)/, m) {
+    data["Time"] = m[1]
+}
+
+END {
+    for (e in data) print e, data[e]
+    yield()
+}
+
+function header() {
+    printf "Graph,"
+    printf "N,"
+    printf "M,"
+    printf "K,"
+    printf "Seed,"
+    printf "Cut,"
+    printf "Balance,"
+    printf "Time,"
+    printf "Failed\n"
+}
+
+function yield() {
+    if (length(data) <= 4) { return }
+    failed = (length(data) != 8)
+    
+    printf "%s,", data["Graph"]
+    printf "%d,", data["N"]
+    printf "%d,", data["M"]
+    printf "%d,", data["K"]
+    printf "%d,", data["Seed"]
+    printf "%d,", data["Cut"]
+    printf "%f,", data["Balance"]
+    printf "%f,", data["Time"]
+    printf "%d\n", failed
+    
+    reset()
+}
+
+function reset() {
+    split("", data)
+}

@@ -61,7 +61,8 @@ function header() {
 
 function yield() {
     if (length(data) == 0) { return }
-    
+
+    failed = length(data) != 9
     printf "%s,", data["Graph"]
     printf "%d,", data["N"]
     printf "%d,", data["M"]
@@ -71,7 +72,7 @@ function yield() {
     printf "%f,", data["Balance"]
     printf "%f,", data["Time"]
     printf "%d,", data["NumProcessors"]
-    printf "%d\n", length(data) != 9
+    printf "%d\n", failed
     
     reset()
 }

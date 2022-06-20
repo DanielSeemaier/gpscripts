@@ -1,0 +1,68 @@
+# -*-awk-*-
+BEGIN {
+    header()
+    reset()
+    level = 0
+}
+
+/__END_FILE__/ {
+    yield()
+}
+
+match($0, /MPI size=([0-9]+)/, m) {
+    data["Nodes"] = m[1]
+}
+
+match($0, /__BEGIN_FILE__ (.*)\.out/, m) {
+    data["Graph"] = m[1]
+}
+
+match($0, /PARTITION k=([0-9]+) cut=([0-9]+) imbalance=([0-9\.e\-]+)/, m) {
+    data["K"] = m[1]
+    data["CutBefore"] = m[2]
+    data["ImbalanceBefore"] = m[3]
+}
+
+match($0, /RESULT cut=([0-9]+) imbalance=([0-9\.e\-]+)/, m) {
+    data["CutAfter"] = m[1]
+    data["ImbalanceAfter"] = m[2]
+}
+
+match($0, /balancer=([0-9\.e\-]+)/, m) {
+    data["Time"] = m[1]
+}
+
+END {
+    yield()
+}
+
+function header() {
+    printf "Graph,"
+    printf "K,"
+    printf "CutBefore,"
+    printf "ImbalanceBefore,"
+    printf "Time,"
+    printf "CutAfter,"
+    printf "ImbalanceAfter,"
+    printf "Failed\n"
+}
+
+function yield() {
+    if (length(data) == 0) { return }
+    failed = length(data) < 7
+    
+    printf "%s,", data["Graph"]
+    printf "%d,", data["K"]
+    printf "%d,", data["CutBefore"]
+    printf "%f,", data["ImbalanceBefore"]
+    printf "%f,", data["Time"]
+    printf "%d,", data["CutAfter"]
+    printf "%f,", data["ImbalanceAfter"]
+    printf "%d\n", failed
+    
+    reset()
+}
+
+function reset() {
+    split("", data)
+}
